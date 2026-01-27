@@ -15,7 +15,7 @@ fn generate_odd_n_bits(n: u64) -> BigUint {
 
 /*
  * Checks if the number 'n' is a Miller Rabin witness to 'a'
- * If it is, then the number could be prime, if it isn't, then it's a compound
+ * If it is, then the number isn't prime, if it isn't then the number could be prime
  */
 fn miller_rabin_witness(n: &BigUint, a: u64) -> bool {
     let mut s = 0;
@@ -56,7 +56,7 @@ mod test {
     #[test]
     fn test_miller_rabin_witness() {
         let carmichael_numbers = [561u64, 1105, 1729, 2465, 2821, 6601, 8911];
-        let bases = [2u64, 3, 5, 7];
+        let bases = [2u64, 3, 5, 7, 11, 13, 17];
 
         for &n in &carmichael_numbers {
             let n = n.to_biguint().unwrap();
