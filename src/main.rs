@@ -1,13 +1,15 @@
 use num_bigint::{BigUint, RandBigInt, ToBigUint};
 use num_traits::{Euclid, One};
-use rand::Rng;
 
-fn main() {}
+fn main() {
+    let number = generate_prime_n_bits(2048);
+    println!("{number}");
+}
 
 /*
  * Generates an odd number with a length of n bits
  */
-fn generate_odd_n_bits(n: u64) -> BigUint {
+fn generate_odd_n_bits(n: &u64) -> BigUint {
     let mut rng = rand::thread_rng();
     let mut nombre = rng.gen_biguint(n - 1);
     nombre <<= 1;
@@ -54,6 +56,14 @@ fn miller_rabin_test(n: &BigUint) -> bool {
     true
 }
 
+fn generate_prime_n_bits(size: u64) -> BigUint{
+    let mut number = generate_odd_n_bits(&size);
+    while !miller_rabin_test(&number) {
+        number = generate_odd_n_bits(&size);
+    }
+    number 
+}
+
 #[cfg(test)]
 mod test {
     use num_bigint::{BigUint, ToBigUint};
@@ -64,7 +74,7 @@ mod test {
     #[test]
     fn test_odd_numbers() {
         for _ in 0..100 {
-            let x = generate_odd_n_bits(512);
+            let x = generate_odd_n_bits(&512);
             let rem = x % 2.to_biguint().unwrap();
             assert_eq!(rem, BigUint::one());
         }
