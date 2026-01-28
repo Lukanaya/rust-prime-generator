@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use num_bigint::{BigInt, BigUint, RandBigInt, ToBigInt, ToBigUint};
+use num_bigint::{BigUint, RandBigInt, ToBigUint};
 use num_traits::{Euclid, One};
 
 fn main() {
@@ -98,10 +98,10 @@ fn generate_keys(n: u64) -> (PrivateKey, PublicKey) {
     let p = generate_prime_n_bits(n);
     let q = generate_prime_n_bits(n);
     let n = &p*&q;
-    let pub_exp: BigInt = 65537.to_bigint().unwrap();
+    let pub_exp: BigUint = 65537.to_biguint().unwrap();
     let phi = (&p-BigUint::one()) * (&q-BigUint::one());
 
-    let d = pub_exp.modpow(&(BigInt::ZERO - BigInt::one()), &phi.to_bigint().unwrap()).to_biguint().unwrap();
+    let d = pub_exp.modinv(&phi).unwrap();
     let private_key = PrivateKey{
         p,
         q,
